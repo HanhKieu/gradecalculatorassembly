@@ -247,8 +247,20 @@ main PROC
 	
 	call DumpRegs
 	
-	mov ecx, 1000
+	mov ecx, 1000;just made it a huge number bc I'm a lazy programmer ;)
 	mov edi, 0
+	mov edx, ebx
+	
+	
+	loop9:
+	
+	sub bx, 16
+	cmp bx,1 ;if bx reaches less than 1
+	jl divideBySixty
+	inc edi	
+	
+	
+	loop loop9; 4985/16
 	
 	
 	
@@ -257,20 +269,22 @@ main PROC
 	
 	
 	
+	divideBySixty:
 	
-	
-	
-	
-	
+	mov ebx, 0
+	mov ebx, edi ;edi contains 4985 /16 for example
+	add ebx, edx  ;4985 + 4985 /16
+	mov ecx, 100
+	mov edi, 0
 
 	loop7:
 	
-	sub bx, 60
+	sub bx, 64
 	cmp bx,1
 	jl finalPortion
 	inc edi			;edi is a counter, and will be our answer
 
-	loop loop7
+	loop loop7 ;and final divide that by 64
 	
 	
 	finalPortion:
