@@ -41,6 +41,12 @@ INCLUDE Irvine32.inc
 	finalHwScore BYTE 1 DUP(?)
 	midtermScore BYTE 1 DUP(?)
 	finalScore BYTE 1 DUP(?)
+	
+	labScoreAfterMult WORD 1 DUP(?)
+	hwScoreAfterMult WORD 1 DUP(?)
+	midtermScoreAfterMult WORD 1 DUP(?)
+	finalScoreAfterMult WORD 1 DUP(?)
+	
 
 .code
 
@@ -103,6 +109,7 @@ main PROC
 	
 	mov esi, 100 ;ESI CONTAINS CURRENT SMALLEST NUMBER
 
+
 	loop2:
 		inc [hwtext + 2] ;hwtext is "Hw0" it increments the 0 to 1 the first time, then 1 to 2, etc
 		mov edx, OFFSET hwtext
@@ -115,7 +122,6 @@ main PROC
 		mov edx, 0
 		mov edx,esi
 		cmp [edi],dl ;if the number you entered isn't the smaller than the current smallest
-		
 		jg continueNormally2 ; then you don't want to store it as the smallest, so continue normally
 		mov esi,[edi];if the number is smaller, then store it as the smallest
 		continueNormally2:
@@ -152,21 +158,30 @@ main PROC
 	
 	;=====MULTIPLY LT BY 5===== 
 	mov edi, OFFSET finalLabScore
+
 	mov ebx,0
 	mov ecx, 5
+	mov edx, 0
 
 	loop3:
-
-	add ebx,[edi]
-	
+	call DumpRegs
+	mov dl,[edi]
+	add ebx, edx
 	loop loop3
 	
-	mov [edi],bl
+	
+	mov edi, OFFSET labScoreAfterMult
+	mov [edi],bx
 
+	call DumpRegs
 	
 	;=====MULTIPLY HT BY 3 ======
+	
 	mov edi , OFFSET finalHwScore
+
+	
 	mov ebx,0
+	mov bl,[edi] ;check
 	mov ecx,3
 	loop4:
 	
@@ -175,8 +190,9 @@ main PROC
 
 	loop loop4
 		
-	
-	mov [edi],bl
+	mov edi, OFFSET hwScoreAfterMult
+	mov [edi],bx
+
 	
 	
 	;=====MULTIPLY EM BY 15 ======
@@ -190,8 +206,8 @@ main PROC
 
 	loop loop5
 		
-	
-	mov [edi],bl
+	mov edi, OFFSET midtermScoreAfterMult
+	mov [edi],bx
 	
 	;=====MULTIPLY EF BY 21 ======
 	mov edi , OFFSET finalScore
@@ -200,22 +216,29 @@ main PROC
 	loop6:
 	add ebx,[edi]
 	loop loop6
-	mov [edi],bl
+	mov edi, OFFSET finalScoreAfterMult
+	mov [edi],bx
 	
 	;=====ADD UP LAB SCORE, HW SCORE, MIDTERM, AND FINAL
 
 	mov ebx, 0
-	mov edi, [OFFSET finalLabScore]
+	mov edx, 0
+	mov edi, OFFSET finalScoreAfterMult
+
 	add ebx, [edi]
-	mov edi, [OFFSET finalHwScore]
+	mov edi, OFFSET hwScoreAfterMult
+
 	add ebx, [edi]
-	mov edi, [OFFSET midtermScore]
+	mov edi, OFFSET midtermScoreAfterMult
+
 	add ebx, [edi]
-	mov edi, [OFFSET finalScore]
+	mov edi, OFFSET finalScoreAfterMult
+	;mov edx, [edi];checke
+	; call DumpRegs
 	add ebx, [edi]
 	;EBX NOW CONTAINS THE SUMMED UP NUMERATOR
 	
-	call DumpRegs
+	 ;call DumpRegs
 	
 	mov ecx, 1000
 	mov edi, 0
