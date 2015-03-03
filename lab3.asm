@@ -64,7 +64,11 @@ main PROC
 		call WriteString
 		call ReadInt ;reads integer into EAX
 		mov [edi], al ;moves the number you entered
-		cmp [edi],esi ;if the number you entered isn't the smaller than the current smallest
+	
+		mov edx, 0
+		mov edx,esi
+		cmp [edi],dl ;if the number you entered isn't the smaller than the current smallest
+		
 		jg continueNormally ; then you don't want to store it as the smallest, so continue normally
 		mov esi,[edi]					;if the number is smaller, then store it as the smallest
 		continueNormally:
@@ -76,7 +80,18 @@ main PROC
 	
 	sub ebx, esi ;DROPS THE LOWEST LAB SCORE
 	mov edi, OFFSET finalLabScore 
-	mov [edi],ebx ;stores the finalLabScore in a variable
+	mov [edi],bl ;stores the finalLabScore in a variable
+	mov edx, esi ;JUST TO CHECK VALUES
+
+	
+
+	
+	
+	call DumpRegs
+	
+	
+	
+	
 
 	;=========READS HOMEWORK ==========
 	mov ecx, 4 ;make it loop 4 times
@@ -93,9 +108,14 @@ main PROC
 		mov edx, OFFSET hwtext
 		call WriteString
 		call ReadInt ;reads integer into EAX
-		mov [edi], eax ;moves the number you entered
+		mov [edi], al ;moves the number you entered
+	
 		
-		cmp [edi],esi ;if the number you entered isn't the smaller than the current smallest
+		
+		mov edx, 0
+		mov edx,esi
+		cmp [edi],dl ;if the number you entered isn't the smaller than the current smallest
+		
 		jg continueNormally2 ; then you don't want to store it as the smallest, so continue normally
 		mov esi,[edi];if the number is smaller, then store it as the smallest
 		continueNormally2:
@@ -106,7 +126,10 @@ main PROC
 	
 	sub ebx, esi
 	mov edi, OFFSET finalHwScore
-	mov [edi],ebx ;STORES finalHwScore in variable
+	mov [edi],bl ;STORES finalHwScore in variable
+	mov edx, esi ;JUST TO CHECK VALUES
+	
+	call DumpRegs
 	
 	
 	;===============MIDTERM PROMPT==========
@@ -192,6 +215,7 @@ main PROC
 	add ebx, [edi]
 	;EBX NOW CONTAINS THE SUMMED UP NUMERATOR
 	
+	call DumpRegs
 	
 	mov ecx, 1000
 	mov edi, 0
