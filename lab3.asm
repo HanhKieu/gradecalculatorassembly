@@ -29,7 +29,7 @@ INCLUDE Irvine32.inc
 	labprompt BYTE "Enter the four lab grades", 0 ;Each string with null terminator
 	labtext BYTE "Lab0: ", 0
 	
-	hwprompt BYTE "Enter the four hw grades : ", 0
+	hwprompt BYTE "Enter the four Hw grades", 0
 	hwtext BYTE "Hw0: ",0
 	
 	Labs BYTE 4 DUP(?) ;allocates 4 unintialized BYTES to store our lab scores
@@ -37,6 +37,8 @@ INCLUDE Irvine32.inc
 	
 	midtermprompt BYTE "Enter the midterm exam grade: ",0
 	finalprompt BYTE "Enter the final exam grade: ",0
+	totalGrade BYTE "Total Grade = ",0
+	letterGrade BYTE "Letter Grade = ",0
 	finalLabScore BYTE 1 DUP(?)
 	finalHwScore BYTE 1 DUP(?)
 	midtermScore BYTE 1 DUP(?)
@@ -59,6 +61,7 @@ main PROC
 	mov ebx, 0
 	mov edx, OFFSET labprompt ;move first address to EDX so WriteString can display
 	call WriteString
+	call CrlF ;ADDS A NEW LINE
 
 	mov ecx, 4
 	mov edi, OFFSET Labs
@@ -92,9 +95,7 @@ main PROC
 	
 
 	
-	
-	call DumpRegs
-	
+
 	
 	
 	
@@ -103,6 +104,7 @@ main PROC
 	mov ecx, 4 ;make it loop 4 times
 	mov edx, OFFSET hwprompt
 	call WriteString
+	call CrlF
 	mov edi, OFFSET Homeworks
 	mov ebx, 0 ;reset accumulator
 
@@ -135,8 +137,7 @@ main PROC
 	mov [edi],bl ;STORES finalHwScore in variable
 	mov edx, esi ;JUST TO CHECK VALUES
 	
-	call DumpRegs
-	
+
 	
 	;===============MIDTERM PROMPT==========
 
@@ -172,7 +173,7 @@ main PROC
 	mov edi, OFFSET labScoreAfterMult
 	mov [edi],bx
 
-	call DumpRegs
+
 	
 	;=====MULTIPLY HT BY 3 ======
 	
@@ -191,8 +192,6 @@ main PROC
 		
 	mov edi, OFFSET hwScoreAfterMult
 	mov [edi],bx
-	call DumpRegs
-
 	
 	
 	;=====MULTIPLY EM BY 15 ======
@@ -209,7 +208,7 @@ main PROC
 		
 	mov edi, OFFSET midtermScoreAfterMult
 	mov [edi],bx
-	call DumpRegs
+
 	
 	;=====MULTIPLY EF BY 21 ======
 	mov edi , OFFSET finalScore
@@ -222,7 +221,7 @@ main PROC
 	loop loop6
 	mov edi, OFFSET finalScoreAfterMult
 	mov [edi],bx
-	call DumpRegs
+
 	
 	;=====ADD UP LAB SCORE, HW SCORE, MIDTERM, AND FINAL
 
@@ -244,8 +243,7 @@ main PROC
 	mov dx, [edi]
 	add ebx, edx
 	;EBX NOW CONTAINS THE SUMMED UP NUMERATOR ;contains 4985
-	
-	call DumpRegs
+
 	
 	mov ecx, 1000;just made it a huge number bc I'm a lazy programmer ;)
 	mov edi, 0
@@ -292,9 +290,48 @@ main PROC
 	mov edx, 0
 	mov edx, edi
 	mov eax,edx
+	mov edx, OFFSET totalGrade
+	call Crlf ;newline
+	call WriteString
 	call WriteInt
-	call DumpRegs
+	call Crlf 
+	mov edx, OFFSET letterGrade
+	call WriteString
 	
+	cmp	al, 85
+	jg Alabel
+	cmp al, 75
+	jg Blabel
+	cmp al, 65
+	jg Clabel
+	cmp al, 59
+	jg Dlabel
+	
+	mov al, 'F'
+	
+	
+	Alabel:	
+		mov al, 'A'
+		jmp finished
+
+	Blabel:	
+		mov al, 'B'
+		jmp finished
+
+	Clabel: 
+		mov al, 'C'
+		jmp finished
+
+	Dlabel:	
+		mov al, 'D'
+		jmp finished
+		
+	finished:
+		call WriteChar
+		call Crlf
+	
+	
+
 	
 	
 	
@@ -303,7 +340,7 @@ main PROC
 
 	
 
-exit
+	exit
 main ENDP
 
 
