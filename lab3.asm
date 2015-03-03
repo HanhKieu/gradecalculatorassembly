@@ -164,7 +164,6 @@ main PROC
 	mov edx, 0
 
 	loop3:
-	call DumpRegs
 	mov dl,[edi]
 	add ebx, edx
 	loop loop3
@@ -181,17 +180,18 @@ main PROC
 
 	
 	mov ebx,0
-	mov bl,[edi] ;check
+	mov edx, 0
 	mov ecx,3
 	loop4:
-	
-	add ebx,[edi]
+	mov dl,[edi]
+	add ebx,edx
 	
 
 	loop loop4
 		
 	mov edi, OFFSET hwScoreAfterMult
 	mov [edi],bx
+	call DumpRegs
 
 	
 	
@@ -199,46 +199,53 @@ main PROC
 	mov edi , OFFSET midtermScore
 	mov ebx,0
 	mov ecx,15
+	mov edx, 0
 	loop5:
-	
-	add ebx,[edi]
+	mov dl, [edi]
+	add ebx,edx
 	
 
 	loop loop5
 		
 	mov edi, OFFSET midtermScoreAfterMult
 	mov [edi],bx
+	call DumpRegs
 	
 	;=====MULTIPLY EF BY 21 ======
 	mov edi , OFFSET finalScore
 	mov ebx,0
 	mov ecx,21
+	mov edx, 0
 	loop6:
-	add ebx,[edi]
+	mov dl, [edi]
+	add ebx,edx
 	loop loop6
 	mov edi, OFFSET finalScoreAfterMult
 	mov [edi],bx
+	call DumpRegs
 	
 	;=====ADD UP LAB SCORE, HW SCORE, MIDTERM, AND FINAL
 
 	mov ebx, 0
 	mov edx, 0
-	mov edi, OFFSET finalScoreAfterMult
-
-	add ebx, [edi]
+	mov edi, OFFSET labScoreAfterMult
+	
+	mov dx, [edi]
+	add ebx, edx
 	mov edi, OFFSET hwScoreAfterMult
-
-	add ebx, [edi]
+	mov dx, [edi]
+	add ebx, edx
 	mov edi, OFFSET midtermScoreAfterMult
-
-	add ebx, [edi]
+	mov dx, [edi]
+	add ebx, edx
 	mov edi, OFFSET finalScoreAfterMult
 	;mov edx, [edi];checke
 	; call DumpRegs
-	add ebx, [edi]
+	mov dx, [edi]
+	add ebx, edx
 	;EBX NOW CONTAINS THE SUMMED UP NUMERATOR
 	
-	 ;call DumpRegs
+	call DumpRegs
 	
 	mov ecx, 1000
 	mov edi, 0
