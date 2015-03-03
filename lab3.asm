@@ -243,27 +243,43 @@ main PROC
 	; call DumpRegs
 	mov dx, [edi]
 	add ebx, edx
-	;EBX NOW CONTAINS THE SUMMED UP NUMERATOR
+	;EBX NOW CONTAINS THE SUMMED UP NUMERATOR ;contains 4985
 	
 	call DumpRegs
 	
 	mov ecx, 1000
 	mov edi, 0
 	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+
 	loop7:
 	
-	sub ebx, 60
-	cmp bl,1
+	sub bx, 60
+	cmp bx,1
 	jl finalPortion
 	inc edi			;edi is a counter, and will be our answer
 
 	loop loop7
 	
-
+	
 	finalPortion:
+	mov eax, 0
+	mov edx, 0
 	mov edx, edi
-	movzx eax,al
+	mov eax,edx
 	call WriteInt
+	call DumpRegs
 	
 	
 	
